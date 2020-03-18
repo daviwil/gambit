@@ -12,6 +12,10 @@ wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_pla
 wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
 patch < config.patch
 
+echo "### GIT:"
+sh -c "which git"
+echo ""
+
 sh -c "./configure --enable-single-host --prefix='%CD:\=/%/dist' CC=cl; make -j4; make install"
 
 cat config.log
