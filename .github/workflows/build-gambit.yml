@@ -26,9 +26,8 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
-        pushd
         call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x86_amd64
-        popd
+        cd %GITHUB_WORKSPACE%/gambit
         mkdir dist
         build-gambit.cmd
 
