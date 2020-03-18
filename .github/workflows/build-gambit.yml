@@ -17,8 +17,8 @@ jobs:
         update: true
         path-type: inherit
 
-    - name: Install VC++ 2015
-      run: choco install microsoft-visual-cpp-build-tools -y
+    # - name: Install VC++ 2015
+    #   run: choco install microsoft-visual-cpp-build-tools -y
 
     - name: Install Dependencies
       shell: cmd
@@ -32,9 +32,9 @@ jobs:
         set PATH=c:\tools\msys64\usr\bin;%PATH%
         cd %prevdir%
         mkdir dist
-        msys2do wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
-        msys2do wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
-        msys2do patch < config.patch
+      # msys2do wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
+      # msys2do wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+      # msys2do patch < config.patch
       #msys2do "./configure --enable-single-host --prefix=%CD:\=/%/dist CC=cl; make -j4; make install"
 
     - name: Upload Artifact
