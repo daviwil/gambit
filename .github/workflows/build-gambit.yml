@@ -18,9 +18,6 @@ jobs:
         path-type: inherit
         msystem: MSYS
 
-    # - name: Install VC++ 2015
-    #   run: choco install microsoft-visual-cpp-build-tools -y
-
     - name: Install Dependencies
       shell: cmd
       run: msys2do pacman -S --noconfirm autoconf make patch
