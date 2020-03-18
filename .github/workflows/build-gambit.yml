@@ -27,18 +27,9 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
-        dir %RUNNER_TEMP%\msys\msys64\usr\bin
-        set prevdir=%CD%
-        call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x64
-        cl
         set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
-        cd %prevdir%
         mkdir dist
-        wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
-        wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
-        patch < config.patch
-        sh -c "./configure --enable-single-host --prefix=%CD:\=/%/dist CC=cl; make -j4; make install"
-
+        build-gambit.cmd
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
