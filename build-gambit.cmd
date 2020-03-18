@@ -5,7 +5,7 @@ REM https://github.com/gambit/gambit/issues/480#issuecomment-581215837
 setlocal
 dir /s /b "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\"
 
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.0
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
 set PATH=c:\tools\msys64\usr\bin;%PATH%
 
 REM Patch outdated configuration files
