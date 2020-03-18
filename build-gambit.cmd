@@ -10,6 +10,8 @@ call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" 
 set PATH=c:\tools\msys64\usr\bin;%PATH%
 cd /d %prevdir%
 
+cl
+
 REM Patch outdated configuration files
 wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
 wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
