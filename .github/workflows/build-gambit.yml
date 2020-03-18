@@ -1,0 +1,151 @@
+name: Build Gambit
+
+on:
+  push:
+    branches: [ build-gambit ]
+
+jobs:
+  Windows-mingw:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch Tags
+      run: git fetch --prune --unshallow
+
+    - name: Install MSYS2
+      uses: numworks/setup-msys2@v1
+      with:
+        update: true
+        path-type: inherit
+
+    - name: Install Dependencies
+      shell: cmd
+      run: msys2do pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git
+
+    - name: Build Gambit Scheme
+      shell: cmd
+      run: msys2do ./.github/workflows/build-gambit.sh
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-win-x64-mingw
+        path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: powershell
+      run: |
+        # Fake a package.json to make publish-release happy
+        "{}" | sc package.json
+        $hash = git rev-parse --short HEAD
+        Compress-Archive -Path .\dist\* -DestinationPath gambit-win-x64-mingw.zip
+        $ErrorActionPreference = "SilentlyContinue"
+        npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-mingw.zip --reuseRelease --target_commitish $env:GITHUB_SHA
+
+  Windows-msvc:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch Tags
+      run: git fetch --prune --unshallow
+
+    - name: Install MSYS2
+      uses: numworks/setup-msys2@v1
+      with:
+        update: true
+        path-type: inherit
+        msystem: MSYS
+
+    - name: Install Dependencies
+      shell: cmd
+      run: msys2do pacman -S --noconfirm autoconf make patch
+
+    - name: Build Code
+      shell: cmd
+      run: |
+        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
+        .github\workflows\build-gambit.cmd
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-win-x64-msvc
+        path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: powershell
+      run: |
+        # Fake a package.json to make publish-release happy
+        "{}" | sc package.json
+        $hash = git rev-parse --short HEAD
+        Compress-Archive -Path .\dist\* -DestinationPath gambit-win-x64-msvc.zip
+        $ErrorActionPreference = "SilentlyContinue"
+        npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-msvc.zip --reuseRelease --target_commitish $env:GITHUB_SHA
+
+  Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Don't checkout just the first commit, breaks `git describe`
+
+    - name: Build Gambit Scheme
+      run: |
+        git fetch --tags
+        ./.github/workflows/build-gambit.sh
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-linux-x64
+        path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Fake a package.json to make publish-release happy
+        echo "{}" > package.json
+        hash=`git rev-parse --short HEAD`
+        cd dist
+        zip -r ../gambit-linux-x64.zip ./*
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets ../gambit-linux-x64.zip --reuseRelease --target_commitish $GITHUB_SHA
+
+  MacOS:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Don't checkout just the first commit, breaks `git describe`
+
+    - name: Build Gambit Scheme
+      run: |
+        git fetch --tags
+        ./.github/workflows/build-gambit.sh
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-macos-x64
+        path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Fake a package.json to make publish-release happy
+        echo "{}" > package.json
+        hash=`git rev-parse --short HEAD`
+        cd dist
+        zip -r ../gambit-macos-x64.zip ./*
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets ../gambit-macos-x64.zip --reuseRelease --target_commitish $GITHUB_SHA
