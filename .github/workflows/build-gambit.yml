@@ -25,7 +25,14 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
+        # The initial checkout doesn't fetch tags, do that now
+        # so that bootstrapping works
+        git fetch origin --tags
+
+        # Use the msys2 installation directly via PATH
         set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
+
+        # Run the build script
         mkdir dist
         build-gambit.cmd
 
