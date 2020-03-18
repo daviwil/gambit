@@ -13,6 +13,9 @@ jobs:
 
     - name: Install MSYS2
       uses: numworks/setup-msys2@v1
+      with:
+        update: true
+        path-type: inherit
 
     - name: Install VC++ 2015
       run: choco install microsoft-visual-cpp-build-tools -y
