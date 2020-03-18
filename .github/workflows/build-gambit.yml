@@ -1,0 +1,48 @@
+name: Build Gambit
+
+on:
+  push:
+    branches: [ build-gambit ]
+
+jobs:
+  Windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install MSYS2 and VC++ 2015
+      run: |
+        choco install msys2 -y
+        choco install microsoft-visual-cpp-build-tools -y
+
+    - name: Install Dependencies
+      run: sh -c "pacman -S --noconfirm autoconf make patch"
+
+    - name: Build Code
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x86_amd64
+        mkdir dist
+        build-gambit.cmd
+
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: gambit-windows
+    #     path: dist/
+
+  Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Gambit Scheme
+      run: ./build-gambit.sh
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-linux
+        path: dist/
