@@ -18,8 +18,8 @@ jobs:
         path-type: inherit
         msystem: MSYS
 
-    - name: Install VC++ 2015
-      run: choco install microsoft-visual-cpp-build-tools -y
+    # - name: Install VC++ 2015
+    #   run: choco install microsoft-visual-cpp-build-tools -y
 
     - name: Install Dependencies
       shell: cmd
@@ -28,6 +28,10 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
+        dir "C:\Program Files (x86)\Microsoft Visual Studio\"
+        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019"
+        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary"
+        dir "C:\Program Files (x86)\Microsoft Visual Studio\2017"
         set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
         mkdir dist
         build-gambit.cmd
