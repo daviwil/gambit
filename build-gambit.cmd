@@ -15,5 +15,5 @@ wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_pla
 wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
 patch < config.patch
 
-REM sh -c "./configure --enable-single-host --prefix=%CD:\=/%/dist CC=cl; make -j4; make install"
-sh -c "./configure --enable-single-host CC=cl; make -j4;make install"
+sh -c "./configure --enable-single-host --prefix='%CD:\=/%/dist' CC=cl; make -j4; make install"
+REM sh -c "./configure --enable-single-host CC=cl; make -j4;make install"
