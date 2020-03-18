@@ -13,3 +13,5 @@ wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_p
 patch < config.patch
 
 sh -c "./configure --enable-single-host --prefix='%CD:\=/%/dist' CC=cl; make -j4; make install"
+
+cat config.log
