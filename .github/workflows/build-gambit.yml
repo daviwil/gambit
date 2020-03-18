@@ -11,24 +11,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # - name: Install MSYS2 and VC++ 2015
-    #   run: |
-    #     choco install microsoft-visual-cpp-build-tools -y
+    - name: Install MSYS2 and VC++ 2015
+      run: |
+        choco install msys2 -y
+        choco install microsoft-visual-cpp-build-tools -y
 
-      # choco install msys2 -y
+    - name: Install Dependencies
+      shell: cmd
+      run: |
+        c:\tools\msys64\usr\bin\sh.exe -c "pacman -S --noconfirm autoconf make patch"
 
-    # - name: Install Dependencies
-    #   shell: cmd
-    #   run: |
-    #     set PATH=c:\tools\msys64\usr\bin;%PATH%
-    #     sh -c "pacman -S --noconfirm autoconf make patch"
-
-        # call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x86_amd64
-        # cd %GITHUB_WORKSPACE%/gambit
     - name: Build Code
       shell: cmd
       run: |
-
         mkdir dist
         build-gambit.cmd
 
