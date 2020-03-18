@@ -27,6 +27,7 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
+        cl
         dir "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\"
         set prevdir=%CD%
         call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x64
