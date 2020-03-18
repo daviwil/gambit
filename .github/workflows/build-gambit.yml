@@ -13,11 +13,15 @@ jobs:
 
     - name: Install MSYS2 and VC++ 2015
       run: |
-        choco install msys2 -y
         choco install microsoft-visual-cpp-build-tools -y
 
-    - name: Install Dependencies
-      run: sh -c "pacman -S --noconfirm autoconf make patch"
+      # choco install msys2 -y
+
+    # - name: Install Dependencies
+    #   shell: cmd
+    #   run: |
+    #     set PATH=c:\tools\msys64\usr\bin;%PATH%
+    #     sh -c "pacman -S --noconfirm autoconf make patch"
 
     - name: Build Code
       shell: cmd
