@@ -27,10 +27,10 @@ jobs:
     - name: Build Code
       shell: cmd
       run: |
-        dir "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\"
+        dir %RUNNER_TEMP%\msys\msys64\usr\bin
         set prevdir=%CD%
         call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x64
-        set PATH=c:\tools\msys64\usr\bin;%PATH%
+        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
         cd %prevdir%
         mkdir dist
         wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
