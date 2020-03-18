@@ -4,13 +4,8 @@ REM https://github.com/gambit/gambit/issues/480#issuecomment-581215837
 
 setlocal
 
-REM Set environment variables and restore cwd after vcbuildtools.bat changes it
-set prevdir="%CD%"
-call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.0
 set PATH=c:\tools\msys64\usr\bin;%PATH%
-cd /d %prevdir%
-
-cl
 
 REM Patch outdated configuration files
 wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
@@ -18,4 +13,3 @@ wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_p
 patch < config.patch
 
 sh -c "./configure --enable-single-host --prefix='%CD:\=/%/dist' CC=cl; make -j4; make install"
-REM sh -c "./configure --enable-single-host CC=cl; make -j4;make install"
