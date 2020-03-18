@@ -6,9 +6,12 @@ setlocal
 
 REM Set environment variables and restore cwd after vcbuildtools.bat changes it
 set prevdir=%CD%
+echo "PREVDIR BEFORE: %prevdir%"
 call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x64
 set PATH=c:\tools\msys64\usr\bin;%PATH%
 cd %prevdir%
+echo "PREVDIR AFTER: %prevdir%"
+echo "CD: %CD%"
 
 REM Patch outdated configuration files
 wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
