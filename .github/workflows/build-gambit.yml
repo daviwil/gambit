@@ -29,12 +29,11 @@ jobs:
       shell: cmd
       run: |
         dir "C:\Program Files (x86)\Microsoft Visual Studio\"
-        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019"
-        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary"
-        dir "C:\Program Files (x86)\Microsoft Visual Studio\2017"
+        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary"
         set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
         mkdir dist
         build-gambit.cmd
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
