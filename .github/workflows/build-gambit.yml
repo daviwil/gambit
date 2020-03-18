@@ -35,7 +35,7 @@ jobs:
         msys2do wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
         msys2do wget -O config.guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
         msys2do patch < config.patch
-        msys2do "./configure --enable-single-host --prefix=%CD:\=/%/dist CC=cl; make -j4; make install"
+      #msys2do "./configure --enable-single-host --prefix=%CD:\=/%/dist CC=cl; make -j4; make install"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
