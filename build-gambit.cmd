@@ -6,7 +6,7 @@ setlocal
 
 REM Set environment variables and restore cwd after vcbuildtools.bat changes it
 set prevdir="%CD%"
-call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" x64
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
 set PATH=c:\tools\msys64\usr\bin;%PATH%
 cd /d %prevdir%
 
