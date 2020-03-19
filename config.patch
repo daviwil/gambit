@@ -1,5 +1,5 @@
---- makefile.in	2020-03-18 06:03:38.255317100 -0700
-+++ makefile.in.new	2020-03-18 06:28:42.910997200 -0700
+--- makefile.in	2020-03-19 05:07:57.065224000 -0700
++++ makefile.in.new	2020-03-19 05:10:15.166526600 -0700
 @@ -130,6 +130,8 @@
  	mkdir -p boot
  	$(GIT) archive tags/$(PACKAGE_VERSION) | (cd boot && tar xf -)
@@ -8,4 +8,32 @@
 +	wget -O config.sub 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' && \
  	./configure $(BOOTSTRAP_CONFIGURE_FLAGS) CC='$(C_COMPILER)' && \
  	$(MAKE) bootstrap
+ 
+@@ -162,16 +164,17 @@
+ 	chmod +x gsc-boot@exe@
+ 
+ gsc-boot@exe@:
+-	@if [ -e .git ] && \
+-	    $(GIT) --version > /dev/null 2> /dev/null && \
+-	    $(GIT) describe --tags > /dev/null 2> /dev/null && \
+-	    test "`$(GIT) describe --tags`" != "$(PACKAGE_VERSION)"; then \
+-	  echo "**** checking if current gsc-boot must be built"; \
+-	  $(MAKE) current-gsc-boot; \
+-	else \
+-	  echo "**** using a dummy gsc-boot"; \
+-	  $(MAKE) dummy-gsc-boot; \
+-	fi
++	$(MAKE) current-gsc-boot
++#	@if [ -e .git ] && \
++#	    $(GIT) --version > /dev/null 2> /dev/null && \
++#	    $(GIT) describe --tags > /dev/null 2> /dev/null && \
++#	    test "`$(GIT) describe --tags`" != "$(PACKAGE_VERSION)"; then \
++#	  echo "**** checking if current gsc-boot must be built"; \
++#	  $(MAKE) current-gsc-boot; \
++#	else \
++#	  echo "**** using a dummy gsc-boot"; \
++#	  $(MAKE) dummy-gsc-boot; \
++#	fi
+ 
+ fake_target:
  
