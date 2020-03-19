@@ -68,3 +68,14 @@ jobs:
       with:
         name: gambit-linux
         path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Fake a package.json to make publish-release happy
+        echo "{}" > package.json
+        hash=`git rev-parse --short HEAD`
+        cd dist
+        zip -r ../gambit-linux-x64-cl.zip ./*
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets ../gambit-linux-x64-cl.zip --reuseRelease --target_commitish $GITHUB_SHA
