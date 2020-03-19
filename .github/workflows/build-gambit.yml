@@ -43,6 +43,9 @@ jobs:
         path: dist/
 
     - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: powershell
       run: |
         # Fake a package.json to make publish-release happy
         "{}" | sc package.json
