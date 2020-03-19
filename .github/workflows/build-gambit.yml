@@ -36,11 +36,19 @@ jobs:
         mkdir dist
         .github\workflows\build-gambit.cmd
 
-    - name: Upload Artifact
+    - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
         name: gambit-win-x64-cl
         path: dist/
+
+    - name: Publish Release Artifact
+      run: |
+        # Fake a package.json to make publish-release happy
+        "{}" | sc package.json
+        $hash = git rev-parse --short HEAD
+        Compress-Archive -Path .\dist\* -DestinationPath gambit-win-x64-cl.zip
+        npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-cl.zip --reuseRelease --target_commitish $env:GITHUB_SHA
 
   Linux:
     runs-on: ubuntu-latest

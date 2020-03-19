@@ -26,3 +26,4 @@ I'm getting the most optimized and effective builds on each platform.
 
 - https://github.com/gambit/gambit/issues/480#issuecomment-581215837
 - https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
+- https://github.com/actions/virtual-environments/blob/master/images/win/Windows2019-Readme.md
