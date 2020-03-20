@@ -63,7 +63,6 @@ jobs:
     - name: Build Gambit Scheme
       run: |
         git fetch --tags
-        patch < ./.github/workflows/makefile.patch
         ./.github/workflows/build-gambit.sh
 
     - name: Upload Artifact
@@ -82,3 +81,31 @@ jobs:
         cd dist
         zip -r ../gambit-linux-x64.zip ./*
         npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets ../gambit-linux-x64.zip --reuseRelease --target_commitish $GITHUB_SHA
+
+  MacOS:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Gambit Scheme
+      run: |
+        git fetch --tags
+        ./.github/workflows/build-gambit.sh
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-macos-x64
+        path: dist/
+
+    - name: Publish Release Artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Fake a package.json to make publish-release happy
+        echo "{}" > package.json
+        hash=`git rev-parse --short HEAD`
+        cd dist
+        zip -r ../gambit-macos-x64.zip ./*
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets ../gambit-macos-x64.zip --reuseRelease --target_commitish $GITHUB_SHA
