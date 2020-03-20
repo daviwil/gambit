@@ -91,7 +91,7 @@ jobs:
     - name: Build Gambit Scheme
       run: |
         git fetch --tags
-        ./.github/workflows/build-gambit.sh
+        CC="gcc-9" ./.github/workflows/build-gambit.sh
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
