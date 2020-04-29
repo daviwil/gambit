@@ -64,7 +64,7 @@ jobs:
 
     - name: Install Dependencies
       shell: cmd
-      run: msys2do pacman -S --noconfirm autoconf make
+      run: msys2do pacman -S --noconfirm autoconf make patch
 
     - name: Build Code
       shell: cmd

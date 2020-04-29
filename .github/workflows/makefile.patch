@@ -9,31 +9,3 @@
  	./configure $(BOOTSTRAP_CONFIGURE_FLAGS) CC='$(C_COMPILER)' && \
  	$(MAKE) bootstrap
  
-@@ -162,16 +164,17 @@
- 	chmod +x gsc-boot@exe@
- 
- gsc-boot@exe@:
--	@if [ -e .git ] && \
--	    $(GIT) --version > /dev/null 2> /dev/null && \
--	    $(GIT) describe --tags > /dev/null 2> /dev/null && \
--	    test "`$(GIT) describe --tags`" != "$(PACKAGE_VERSION)"; then \
--	  echo "**** checking if current gsc-boot must be built"; \
--	  $(MAKE) current-gsc-boot; \
--	else \
--	  echo "**** using a dummy gsc-boot"; \
--	  $(MAKE) dummy-gsc-boot; \
--	fi
-+	$(MAKE) current-gsc-boot
-+#	@if [ -e .git ] && \
-+#	    $(GIT) --version > /dev/null 2> /dev/null && \
-+#	    $(GIT) describe --tags > /dev/null 2> /dev/null && \
-+#	    test "`$(GIT) describe --tags`" != "$(PACKAGE_VERSION)"; then \
-+#	  echo "**** checking if current gsc-boot must be built"; \
-+#	  $(MAKE) current-gsc-boot; \
-+#	else \
-+#	  echo "**** using a dummy gsc-boot"; \
-+#	  $(MAKE) dummy-gsc-boot; \
-+#	fi
- 
- fake_target:
- 

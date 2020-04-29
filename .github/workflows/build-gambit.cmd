@@ -8,6 +8,9 @@ if "%GITHUB_ACTIONS%" == "true" (
     call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
 )
 
+REM Patch makefile to update outdated configuration files
+patch < .github\workflows\makefile.patch
+
 set PATH=c:\tools\msys64\usr\bin;%PATH%
 
 if not exist "dist" (
