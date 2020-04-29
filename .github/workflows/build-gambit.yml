@@ -24,7 +24,8 @@ jobs:
     - name: Build Gambit Scheme
       shell: cmd
       run: |
-        git fetch --tags
+        msys2do git fetch --tags
+        msys2do git describe --tags
         msys2do ./.github/workflows/build-gambit.sh
 
     - name: Upload Build Artifact
