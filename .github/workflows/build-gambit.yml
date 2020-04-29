@@ -16,30 +16,21 @@ jobs:
       with:
         update: true
         path-type: inherit
-        msystem: MSYS
 
     - name: Install Dependencies
       shell: cmd
-      run: msys2do pacman -S --noconfirm autoconf make patch
+      run: msys2do pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git
 
-    - name: Build Code
+    - name: Build Gambit Scheme
       shell: cmd
       run: |
-        REM The initial checkout doesn't fetch tags, do that now
-        REM so that bootstrapping works
-        git fetch origin --tags
-
-        REM Use the msys2 installation directly via PATH
-        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
-
-        REM Run the build script
-        mkdir dist
-        .github\workflows\build-gambit.cmd
+        git fetch --tags
+        msys2do ./.github/workflows/build-gambit.sh
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: gambit-win-x64-msvc
+        name: gambit-win-x64-mingw
         path: dist/
 
     - name: Publish Release Artifact
@@ -50,9 +41,9 @@ jobs:
         # Fake a package.json to make publish-release happy
         "{}" | sc package.json
         $hash = git rev-parse --short HEAD
-        Compress-Archive -Path .\dist\* -DestinationPath gambit-win-x64-msvc.zip
+        Compress-Archive -Path .\dist\* -DestinationPath gambit-win-x64-mingw.zip
         $ErrorActionPreference = "SilentlyContinue"
-        npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-msvc.zip --reuseRelease --target_commitish $env:GITHUB_SHA
+        npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-mingw.zip --reuseRelease --target_commitish $env:GITHUB_SHA
 
   Linux:
     runs-on: ubuntu-latest
