@@ -5,7 +5,7 @@ on:
     branches: [ build-gambit ]
 
 jobs:
-  Windows - mingw:
+  Windows-mingw:
     runs-on: windows-latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
         $ErrorActionPreference = "SilentlyContinue"
         npx publish-release --token $env:GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-win-x64-mingw.zip --reuseRelease --target_commitish $env:GITHUB_SHA
 
-  Windows - msvc:
+  Windows-msvc:
     runs-on: windows-latest
 
     steps:
