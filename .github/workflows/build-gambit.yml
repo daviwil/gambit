@@ -23,8 +23,6 @@ jobs:
       shell: cmd
       run: msys2do pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git
 
-    - run: msys2do git describe --tags
-
     - run: msys2do git fetch --tags
 
     - name: Build Gambit Scheme
