@@ -10,6 +10,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Don't checkout just the first commit, breaks `git describe`
 
     - name: Install MSYS2
       uses: numworks/setup-msys2@v1
