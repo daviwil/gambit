@@ -2,19 +2,22 @@
 
 mkdir -p dist
 
-# Bootstrap the build with an earlier commit
-git checkout 00acf8685
+if [ -z "$CC" ]; then
+  export CC=gcc
+fi
 
-./configure --enable-single-host --prefix=$(pwd)/dist
+# Bootstrap the build with an earlier commit
+# TODO: Might be able to use $(git merge-base build-gambit build-gambit-patched)
+git checkout 0f834dbb
+
+./configure --enable-single-host --prefix=$(pwd)/dist CC=$CC
 make -j4
-make install
 make bootstrap
 
 # Put HEAD back to the branch commit
 git checkout build-gambit-patched
 
 # Build with the bootstrapped compiler
-./configure --enable-single-host --prefix=$(pwd)/dist
 make -j4
 make modules
 make install
