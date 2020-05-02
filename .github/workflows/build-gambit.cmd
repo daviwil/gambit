@@ -24,4 +24,4 @@ REM Put HEAD back to the branch commit
 sh -c "git checkout build-gambit-patched"
 
 REM Build with the bootstrapped compiler
-sh -c "./configure --enable-single-host --prefix='%CD:\=/%/dist' CC=cl; make -j4; make modules; make install"
+sh -c "make -j4; make modules; make install"
