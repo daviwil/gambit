@@ -24,7 +24,7 @@ jobs:
       shell: cmd
       run: msys2do pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git
 
-    - name: Build Gambit Scheme
+    - name: Build Gambit
       shell: cmd
       run: msys2do ./.github/workflows/build-gambit.sh
 
@@ -66,11 +66,12 @@ jobs:
       shell: cmd
       run: msys2do pacman -S --noconfirm autoconf make patch
 
-    - name: Build Code
+    - name: Build Gambit
       shell: cmd
       run: |
-        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
-        .github\workflows\build-gambit.cmd
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        set CC="cl"
+        call msys2do ./.github/workflows/build-gambit.sh
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
@@ -95,13 +96,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # Don't checkout just the first commit, breaks `git describe`
 
-    - name: Build Gambit Scheme
-      run: |
-        git fetch --tags
-        ./.github/workflows/build-gambit.sh
+    - name: Fetch Tags
+      run: git fetch --prune --unshallow
+
+    - name: Build Gambit
+      run: ./.github/workflows/build-gambit.sh
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
@@ -125,13 +125,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # Don't checkout just the first commit, breaks `git describe`
 
-    - name: Build Gambit Scheme
-      run: |
-        git fetch --tags
-        ./.github/workflows/build-gambit.sh
+    - name: Fetch Tags
+      run: git fetch --prune --unshallow
+
+    - name: Build Gambit
+      run: ./.github/workflows/build-gambit.sh
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
