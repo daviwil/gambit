@@ -15,7 +15,7 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Install MSYS2
-      uses: numworks/setup-msys2@v1
+      uses: eine/setup-msys2@v0
       with:
         update: true
         path-type: inherit
@@ -56,7 +56,7 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Install MSYS2
-      uses: numworks/setup-msys2@v1
+      uses: eine/setup-msys2@v0
       with:
         update: true
         path-type: inherit
