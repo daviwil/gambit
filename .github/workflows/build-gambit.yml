@@ -15,18 +15,15 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Install MSYS2
-      uses: eine/setup-msys2@v0
-      with:
-        update: true
-        path-type: inherit
+      run: choco install msys2 --params "/NoUpdate"
 
     - name: Install Dependencies
       shell: cmd
-      run: msys2do pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git
+      run: bash -l -c "pacman -S --noconfirm autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git"
 
     - name: Build Gambit
       shell: cmd
-      run: msys2do ./.github/workflows/build-gambit.sh
+      run: bash -l -c ./.github/workflows/build-gambit.sh
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
