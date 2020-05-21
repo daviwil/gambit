@@ -124,5 +124,5 @@ jobs:
       run: |
         # Fake a package.json to make publish-release happy
         echo "{}" > package.json
-        hash=`git rev-parse --short HEAD`
+        hash=${GITHUB_SHA:0:7}
         npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x64.zip,gambit-macos-x64.zip,gambit-win-x64-mingw.zip --reuseRelease --target_commitish $GITHUB_SHA
