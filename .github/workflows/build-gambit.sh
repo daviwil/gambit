@@ -9,7 +9,6 @@ fi
 # Bootstrap the build with an earlier commit
 # TODO: Might be able to use $(git merge-base build-gambit build-gambit-patched)
 BOOTSTRAP_COMMIT=3c4d40de908a
-#BOOTSTRAP_COMMIT=ff3056d1e85
 git checkout $BOOTSTRAP_COMMIT
 
 echo
@@ -26,6 +25,7 @@ git checkout build-gambit-patched
 echo
 echo "### Building Gambit with the bootstrapped compiler"
 echo
+make bootclean
 make -j4
 make modules
 make install
