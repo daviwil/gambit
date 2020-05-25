@@ -612,7 +612,7 @@
             params
             param-prefix)
            (##shell-var-bindings
-            (##shell-install-dirs '("include" "lib"))
+            (##shell-install-dirs '("bin" "include" "lib"))
             ""
             ""))))
 
