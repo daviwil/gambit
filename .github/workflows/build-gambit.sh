@@ -20,7 +20,7 @@ git checkout $BOOTSTRAP_COMMIT
 echo
 echo "### Bootstrapping Gambit compiler from commit $BOOTSTRAP_COMMIT"
 echo
-./configure --enable-single-host --enable-debug --prefix=$(pwd)/dist CC=$CC
+./configure --enable-single-host --prefix=$(pwd)/dist CC=$CC
 make -j4
 make bootstrap
 
