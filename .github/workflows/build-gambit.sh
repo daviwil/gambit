@@ -32,7 +32,6 @@ git checkout build-gambit-patched
 echo
 echo "### Building Gambit with the bootstrapped compiler"
 echo
-make bootclean
 make -j4
 make modules
 make install
