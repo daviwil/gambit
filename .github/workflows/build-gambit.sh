@@ -14,7 +14,7 @@ esac
 
 # Bootstrap the build with an earlier commit
 # TODO: Might be able to use $(git merge-base build-gambit build-gambit-patched)
-BOOTSTRAP_COMMIT=3c4d40de908a
+BOOTSTRAP_COMMIT=c40179c73fc7ae
 git checkout $BOOTSTRAP_COMMIT
 
 echo
