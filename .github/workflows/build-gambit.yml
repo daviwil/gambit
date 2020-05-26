@@ -115,8 +115,6 @@ jobs:
       run: |
         cd ./gambit-linux-x64
         zip -r ../gambit-linux-x64.zip ./*
-        cd ../gambit-macos-x64
-        zip -r ../gambit-macos-x64.zip ./*
         cd ../gambit-win-x64-mingw
         zip -r ../gambit-win-x64-mingw.zip ./*
         cd ..
