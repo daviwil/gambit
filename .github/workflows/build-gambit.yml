@@ -92,7 +92,9 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Build Gambit
-      run: ./.github/workflows/build-gambit.sh
+      run: |
+        export CC=gcc-9
+        ./.github/workflows/build-gambit.sh
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
