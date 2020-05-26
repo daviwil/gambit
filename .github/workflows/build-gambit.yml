@@ -95,12 +95,13 @@ jobs:
       run: |
         export CC=gcc-9
         ./.github/workflows/build-gambit.sh
+        tar -cvzf gambit-macos-x86_64.tar.gz dist/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: gambit-macos-x64
-        path: dist/
+        name: gambit-macos-x86_64
+        path: gambit-macos-x86_64.tar.gz
 
   CreateRelease:
     runs-on: ubuntu-latest
@@ -127,4 +128,4 @@ jobs:
         # Fake a package.json to make publish-release happy
         echo "{}" > package.json
         hash=${GITHUB_SHA:0:7}
-        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x64.zip,gambit-macos-x64.zip,gambit-win-x64-mingw.zip --reuseRelease --target_commitish $GITHUB_SHA
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x64.zip,gambit-macos-x86_64/gambit-macos-x86_64.tar.gz,gambit-win-x64-mingw.zip --reuseRelease --target_commitish $GITHUB_SHA
