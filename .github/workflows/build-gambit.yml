@@ -95,7 +95,9 @@ jobs:
       run: |
         export CC=gcc-9
         ./.github/workflows/build-gambit.sh
-        tar -cvzf gambit-macos-x86_64.tar.gz dist/
+        cd dist/
+        tar -cvzf ../gambit-macos-x86_64.tar.gz ./
+        cd ..
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
