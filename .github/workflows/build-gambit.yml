@@ -28,7 +28,7 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: gambit-win-x64-mingw
+        name: gambit-win-mingw-x86_64
         path: dist/
 
   Windows-msvc:
@@ -61,7 +61,7 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: gambit-win-x64-msvc
+        name: gambit-win-msvc-x86_64
         path: dist/
 
   Linux:
@@ -74,13 +74,17 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Build Gambit
-      run: ./.github/workflows/build-gambit.sh
+      run: |
+        ./.github/workflows/build-gambit.sh
+        cd dist/
+        tar -cvzf ../gambit-linux-x86_64.tar.gz ./
+        cd ..
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: gambit-linux-x64
-        path: dist/
+        name: gambit-linux-x86_64
+        path: gambit-linux-x86_64.tar.gz
 
   MacOS:
     runs-on: macos-latest
@@ -115,10 +119,8 @@ jobs:
 
     - name: Prepare Packages
       run: |
-        cd ./gambit-linux-x64
-        zip -r ../gambit-linux-x64.zip ./*
-        cd ../gambit-win-x64-mingw
-        zip -r ../gambit-win-x64-mingw.zip ./*
+        cd gambit-win-mingw-x86_64
+        zip -r ../gambit-win-mingw-x86_64.zip ./*
         cd ..
 
     - name: Publish Release Artifact
@@ -128,4 +130,4 @@ jobs:
         # Fake a package.json to make publish-release happy
         echo "{}" > package.json
         hash=${GITHUB_SHA:0:7}
-        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x64.zip,gambit-macos-x86_64/gambit-macos-x86_64.tar.gz,gambit-win-x64-mingw.zip --reuseRelease --target_commitish $GITHUB_SHA
+        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x86_64/gambit-linux-x86_64.tar.gz,gambit-macos-x86_64/gambit-macos-x86_64.tar.gz,gambit-win-mingw-x86_64.zip --reuseRelease --target_commitish $GITHUB_SHA
