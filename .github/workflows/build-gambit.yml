@@ -110,25 +110,25 @@ jobs:
         name: gambit-macos-x86_64
         path: gambit-macos-x86_64.tar.gz
 
-  CreateRelease:
-    runs-on: ubuntu-latest
-    needs: [Windows-mingw, Linux, macOS]
+  # CreateRelease:
+  #   runs-on: ubuntu-latest
+  #   needs: [Windows-mingw, Linux, macOS]
 
-    steps:
-    - name: Download Artifacts
-      uses: actions/download-artifact@v2
+  #   steps:
+  #   - name: Download Artifacts
+  #     uses: actions/download-artifact@v2
 
-    - name: Prepare Packages
-      run: |
-        cd gambit-win-mingw-x86_64
-        zip -r ../gambit-win-mingw-x86_64.zip ./*
-        cd ..
+  #   - name: Prepare Packages
+  #     run: |
+  #       cd gambit-win-mingw-x86_64
+  #       zip -r ../gambit-win-mingw-x86_64.zip ./*
+  #       cd ..
 
-    - name: Publish Release Artifact
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        # Fake a package.json to make publish-release happy
-        echo "{}" > package.json
-        hash=${GITHUB_SHA:0:7}
-        npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x86_64/gambit-linux-x86_64.tar.gz,gambit-macos-x86_64/gambit-macos-x86_64.tar.gz,gambit-win-mingw-x86_64.zip --reuseRelease --target_commitish $GITHUB_SHA
+  #   - name: Publish Release Artifact
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     run: |
+  #       # Fake a package.json to make publish-release happy
+  #       echo "{}" > package.json
+  #       hash=${GITHUB_SHA:0:7}
+  #       npx publish-release --token $GITHUB_TOKEN --repo gambit --owner daviwil --name latest-$hash --tag latest-$hash --notes="Automated Build" --assets gambit-linux-x86_64/gambit-linux-x86_64.tar.gz,gambit-macos-x86_64/gambit-macos-x86_64.tar.gz,gambit-win-mingw-x86_64.zip --reuseRelease --target_commitish $GITHUB_SHA
