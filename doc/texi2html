@@ -1661,7 +1661,7 @@ $PRE_BODY_CLOSE = '';
 
 # this is added inside <head></head> after <title> and some <meta name>
 # stuff, it can be used for eg. <style>, <script>, <meta> etc. tags.
-$EXTRA_HEAD = '';
+$EXTRA_HEAD = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>';
 
 # Specifies the minimum page length required before a navigation panel
 # is placed at the bottom of a page 
