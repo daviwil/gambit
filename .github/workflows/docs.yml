@@ -20,6 +20,16 @@ jobs:
         ./configure
         make doc
 
+    - name: Commit Docs to Gambit Site
+      run: |
+        git clone https://daviwil:${{ secrets.GITHUB_TOKEN }}@github.com/daviwil/gambit-site-demo gambit-site
+        cd gambit-site
+        mkdir -p docs/latest
+        cp ../doc/gambit.html docs/latest/
+        git add -A
+        git commit -m "Update docs for latest Gambit build on master"
+        git push origin master
+
     - name: Upload Docs Artifact
       uses: actions/upload-artifact@v1
       with:
