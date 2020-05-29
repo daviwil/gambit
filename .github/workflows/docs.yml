@@ -1,0 +1,29 @@
+name: Gambit - Docs Test
+
+on:
+  push:
+    branches:
+      - generate-docs
+
+jobs:
+  Docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch Tags
+      run: git fetch --prune --unshallow
+
+    - name: Docs
+      run: |
+        sudo apt-get update
+        sudo apt-get install perl
+        ./configure
+        make doc
+
+    - name: Upload Docs Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-docs
+        path: doc/
