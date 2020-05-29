@@ -19,7 +19,7 @@ jobs:
 
     - name: Commit Docs to Gambit Site
       run: |
-        git clone https://daviwil:${{ secrets.GITHUB_TOKEN }}@github.com/daviwil/gambit-site-demo gambit-site
+        git clone https://daviwil:${{ secrets.GAMBIT_SITE_TOKEN }}@github.com/daviwil/gambit-site-demo gambit-site
         cd gambit-site
         mkdir -p docs/latest
         cp ../doc/gambit.html docs/latest/
