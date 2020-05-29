@@ -26,6 +26,8 @@ jobs:
         cd gambit-site
         mkdir -p docs/latest
         cp ../doc/gambit.html docs/latest/
+        git config --global user.name "Gambit Build"
+        git config --global user.email "gambit@iro.umontreal.ca"
         git add -A
         git commit -m "Update docs for latest Gambit build on master"
         git push origin master
