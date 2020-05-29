@@ -1,0 +1,33 @@
+/* Very small screen */
+@media screen and (max-width: 767px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* Small screen */
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+/* Medium screen */
+@media screen and (min-width: 992px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Large screen */
+@media screen and (min-width: 2560px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+body {
+  font-size: 1.3rem;
+  color: #000;
+  background-color: #fffacd;
+}

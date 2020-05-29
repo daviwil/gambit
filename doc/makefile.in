@@ -119,7 +119,7 @@ gambit.pdf: gambit.txi version.txi
 	(cd $(srcdir) && cd $(srcdir) && $(TEXI2DVI) -p gambit.txi) || (echo "*** $@ could not be built (perhaps $(TEXI2DVI) is not installed?)" > $@)
 
 gambit.html: gambit.txi
-	(cd $(srcdir) && $(TEXI2HTML) -def-table gambit.txi) || (echo "*** $@ could not be built (perhaps $(TEXI2HTML) is not installed?)" > $@)
+	(cd $(srcdir) && $(TEXI2HTML) -def-table gambit.txi -css-include gambit.css) || (echo "*** $@ could not be built (perhaps $(TEXI2HTML) is not installed?)" > $@)
 
 gambit.txt: gambit.txi
 	(cd $(srcdir) && $(MAKEINFO) --no-split --no-headers --output gambit.txt gambit.txi) || (echo "*** $@ could not be built (perhaps $(MAKEINFO) is not installed?)" > $@)
@@ -131,9 +131,9 @@ stamp.vti: gambit.txi $(rootfromhere)/configure.ac
 	# don't behave the same on Linux and BSD
 	st_mtime="`stat -s gambit.txi | sed -e 's/.*st_mtime=//g' -e 's/ .*//g'`"; \
 	if [ "$$st_mtime" = "" ]; then \
-	  mtime="`date -r gambit.txi '+%B %d, %Y'`"; \
+		mtime="`date -r gambit.txi '+%B %d, %Y'`"; \
 	else \
-	  mtime="`date -r $$st_mtime '+%B %d, %Y'`"; \
+		mtime="`date -r $$st_mtime '+%B %d, %Y'`"; \
 	fi; \
 	echo "@set EDITION $(PACKAGE_VERSION)" > version.tmp; \
 	echo "@set UPDATED $$mtime" >> version.tmp; \
@@ -166,39 +166,39 @@ install-post: all doc
 	t_mandir="$$i_mandir"; \
 	$(srcdirpfx)$(rootfromhere)/mkidirs "$$i_docdir" "$$i_infodir" "$$i_mandir"; \
 	if test "@ENABLE_SYMLINKS@" = "yes"; then \
-	  $(srcdirpfx)$(rootfromhere)/mkidirs "$$c_docdir" "$$c_infodir" "$$c_mandir"; \
-	  t_docdir="$$c_docdir"; \
-	  t_infodir="$$c_infodir"; \
-	  t_mandir="$$c_mandir"; \
+		$(srcdirpfx)$(rootfromhere)/mkidirs "$$c_docdir" "$$c_infodir" "$$c_mandir"; \
+		t_docdir="$$c_docdir"; \
+		t_infodir="$$c_infodir"; \
+		t_mandir="$$c_mandir"; \
 	fi; \
 	for file in $(INSTFILES_DOC); do \
-	  $(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_docdir/$$file"; \
+		$(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_docdir/$$file"; \
 	done; \
 	for file in $(INSTFILES_INFO); do \
-	  $(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_infodir/$$file"; \
+		$(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_infodir/$$file"; \
 	done; \
 	for file in $(INSTFILES_MAN); do \
-	  $(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_mandir/$$file"; \
+		$(INSTALL_DATA) "$(srcdirpfx)$$file" "$$t_mandir/$$file"; \
 	done; \
 	if test "@bat@" = ""; then \
-	  if test "$$t_docdir" != "$$i_docdir"; then \
-	    r_docdir=`$(rootfromhere)/relpath "$$t_docdir" "$$i_docdir" @ENABLE_MULTIPLE_VERSIONS@`; \
-	    for file in $(INSTFILES_DOC); do \
-	      (cd "$$i_docdir" && $(LN_S) "$$r_docdir$$file" "$$file"); \
-	    done; \
-	  fi; \
-	  if test "$$t_infodir" != "$$i_infodir"; then \
-	    r_infodir=`$(rootfromhere)/relpath "$$t_infodir" "$$i_infodir" @ENABLE_MULTIPLE_VERSIONS@`; \
-	    for file in $(INSTFILES_INFO); do \
-	      (cd "$$i_infodir" && $(LN_S) "$$r_infodir$$file" "$$file"); \
-	    done; \
-	  fi; \
-	  if test "$$t_mandir" != "$$i_mandir"; then \
-	    r_mandir=`$(rootfromhere)/relpath "$$t_mandir" "$$i_mandir" @ENABLE_MULTIPLE_VERSIONS@`; \
-	    for file in $(INSTFILES_MAN); do \
-	      (cd "$$i_mandir" && $(LN_S) "$$r_mandir$$file" "$$file"); \
-	    done; \
-	  fi; \
+		if test "$$t_docdir" != "$$i_docdir"; then \
+			r_docdir=`$(rootfromhere)/relpath "$$t_docdir" "$$i_docdir" @ENABLE_MULTIPLE_VERSIONS@`; \
+			for file in $(INSTFILES_DOC); do \
+				(cd "$$i_docdir" && $(LN_S) "$$r_docdir$$file" "$$file"); \
+			done; \
+		fi; \
+		if test "$$t_infodir" != "$$i_infodir"; then \
+			r_infodir=`$(rootfromhere)/relpath "$$t_infodir" "$$i_infodir" @ENABLE_MULTIPLE_VERSIONS@`; \
+			for file in $(INSTFILES_INFO); do \
+				(cd "$$i_infodir" && $(LN_S) "$$r_infodir$$file" "$$file"); \
+			done; \
+		fi; \
+		if test "$$t_mandir" != "$$i_mandir"; then \
+			r_mandir=`$(rootfromhere)/relpath "$$t_mandir" "$$i_mandir" @ENABLE_MULTIPLE_VERSIONS@`; \
+			for file in $(INSTFILES_MAN); do \
+				(cd "$$i_mandir" && $(LN_S) "$$r_mandir$$file" "$$file"); \
+			done; \
+		fi; \
 	fi
 
 uninstall-pre:
@@ -214,45 +214,45 @@ uninstall-post:
 	i_mandir="$(DESTDIR)$(mandir)/man1"; \
 	t_mandir="$$i_mandir"; \
 	if test "@ENABLE_SYMLINKS@" = "yes"; then \
-	  t_docdir="$$c_docdir"; \
-	  t_infodir="$$c_infodir"; \
-	  t_mandir="$$c_mandir"; \
+		t_docdir="$$c_docdir"; \
+		t_infodir="$$c_infodir"; \
+		t_mandir="$$c_mandir"; \
 	fi; \
 	for file in $(INSTFILES_DOC); do \
-	  rm -f "$$t_docdir/$$file"; \
+		rm -f "$$t_docdir/$$file"; \
 	done; \
 	for file in $(INSTFILES_INFO); do \
-	  rm -f "$$t_infodir/$$file"; \
+		rm -f "$$t_infodir/$$file"; \
 	done; \
 	for file in $(INSTFILES_MAN); do \
-	  rm -f "$$t_mandir/$$file"; \
+		rm -f "$$t_mandir/$$file"; \
 	done; \
 	if test "$$t_docdir" != "$$i_docdir"; then \
-	  for file in $(INSTFILES_DOC); do \
-	    rm -f "$$i_docdir/$$file"; \
-	  done; \
+		for file in $(INSTFILES_DOC); do \
+			rm -f "$$i_docdir/$$file"; \
+		done; \
 	fi; \
 	if test "$$t_infodir" != "$$i_infodir"; then \
-	  for file in $(INSTFILES_INFO); do \
-	    rm -f "$$i_infodir/$$file"; \
-	  done; \
+		for file in $(INSTFILES_INFO); do \
+			rm -f "$$i_infodir/$$file"; \
+		done; \
 	fi; \
 	if test "$$t_mandir" != "$$i_mandir"; then \
-	  for file in $(INSTFILES_MAN); do \
-	    rm -f "$$i_mandir/$$file"; \
-	  done; \
+		for file in $(INSTFILES_MAN); do \
+			rm -f "$$i_mandir/$$file"; \
+		done; \
 	fi; \
 	rmdir "$$t_docdir" 2> /dev/null; \
 	if test "$$t_docdir" != "$$i_docdir"; then \
-	  rmdir "$$i_docdir" 2> /dev/null; \
+		rmdir "$$i_docdir" 2> /dev/null; \
 	fi; \
 	rmdir "$$t_infodir" 2> /dev/null; \
 	if test "$$t_infodir" != "$$i_infodir"; then \
-	  rmdir $$i_infodir 2> /dev/null; \
+		rmdir $$i_infodir 2> /dev/null; \
 	fi; \
 	rmdir "$$t_mandir" 2> /dev/null; \
 	if test "$$t_mandir" != "$$i_mandir"; then \
-	  rmdir "$$i_mandir" 2> /dev/null; \
+		rmdir "$$i_mandir" 2> /dev/null; \
 	fi
 
 select-gen-for-commit-pre:
@@ -271,7 +271,7 @@ clean-pre: mostlyclean-pre
 
 clean-post clean-post-nonrec: mostlyclean-post-nonrec
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.log *.pg \
-	  *.toc *.tp *.vr *.cm *.fl *.op *.tmp
+		*.toc *.tp *.vr *.cm *.fl *.op *.tmp
 
 distclean-pre: clean-pre
 
@@ -281,7 +281,7 @@ bootclean-pre: distclean-pre
 
 bootclean-post bootclean-post-nonrec: distclean-post-nonrec
 	rm -f stamp.vti version.txi \
-	  gambit.ps gambit.pdf gambit*.html gambit.txt gambit.info*
+		gambit.ps gambit.pdf gambit*.html gambit.txt gambit.info*
 
 realclean-pre: bootclean-pre
 
@@ -298,20 +298,20 @@ dist-pre dist-devel-pre:
 	chmod 777 $(rootfromhere)/$(PACKAGE_TARNAME)/$(herefromroot)
 	@echo "  Copying distribution files:"
 	@for file in $(DISTFILES); do \
-	  echo "    $(herefromroot)/$$file"; \
-	  ln $(srcdirpfx)$$file $(rootfromhere)/$(PACKAGE_TARNAME)/$(herefromroot) 2> /dev/null \
-	    || cp -p $(srcdirpfx)$$file $(rootfromhere)/$(PACKAGE_TARNAME)/$(herefromroot); \
+		echo "    $(herefromroot)/$$file"; \
+		ln $(srcdirpfx)$$file $(rootfromhere)/$(PACKAGE_TARNAME)/$(herefromroot) 2> /dev/null \
+			|| cp -p $(srcdirpfx)$$file $(rootfromhere)/$(PACKAGE_TARNAME)/$(herefromroot); \
 	done
 
 dist-post dist-devel-post:
 
 all-recursive bootstrap-recursive install-recursive uninstall-recursive select-gen-for-commit-recursive deselect-gen-for-commit-recursive mostlyclean-recursive clean-recursive distclean-recursive bootclean-recursive realclean-recursive rc-setup-recursive dist-recursive dist-devel-recursive:
 	@if test -n "$(SUBDIRS)"; then \
-	  for subdir in ""$(SUBDIRS); do \
-	    target=`echo $@ | sed 's/-recursive//'`; \
-	    echo making $$target in $$subdir; \
-	    (cd $$subdir && $(MAKE) $$target) || exit 1; \
-	  done \
+		for subdir in ""$(SUBDIRS); do \
+			target=`echo $@ | sed 's/-recursive//'`; \
+			echo making $$target in $$subdir; \
+			(cd $$subdir && $(MAKE) $$target) || exit 1; \
+		done \
 	fi
 
 all: all-post
