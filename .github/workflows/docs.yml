@@ -12,9 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Fetch Tags
-      run: git fetch --prune --unshallow
-
     - name: Docs
       run: |
         ./configure
