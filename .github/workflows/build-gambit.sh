@@ -12,13 +12,11 @@ case "$(uname)" in
   "MINGW64"*) export CFLAGS="-O0" ;;
 esac
 
-# Bootstrap the build with an earlier commit
-# TODO: Might be able to use $(git merge-base build-gambit build-gambit-patched)
-BOOTSTRAP_COMMIT=c40179c73fc7ae
-git checkout $BOOTSTRAP_COMMIT
+# Bootstrap the build against master
+git checkout master
 
 echo
-echo "### Bootstrapping Gambit compiler from commit $BOOTSTRAP_COMMIT"
+echo "### Bootstrapping gsc..."
 echo
 ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist CC=$CC
 make -j4
@@ -30,7 +28,7 @@ git checkout build-gambit-patched
 
 # Build with the bootstrapped compiler
 echo
-echo "### Building Gambit with the bootstrapped compiler"
+echo "### Building Gambit with the bootstrapped gsc"
 echo
 make -j4
 make modules
