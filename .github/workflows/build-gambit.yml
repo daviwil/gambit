@@ -22,7 +22,7 @@ jobs:
       with:
         update: true
         cache: true
-        install: "autoconf git make mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git"
+        install: "autoconf git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git"
 
     - name: Build Gambit
       run: ./.github/workflows/build-gambit.sh
