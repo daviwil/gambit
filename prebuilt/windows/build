@@ -1,6 +1,7 @@
 #! /bin/sh
 
 # Copyright (c) 1994-2015 by Marc Feeley, All Rights Reserved.
+# Copyright (c) 2020 by David Wilson, All Rights Reserved.
 
 herefromroot="prebuilt/windows"
 rootfromhere="../.."
@@ -10,26 +11,21 @@ rootfromhere="../.."
 #  exit 1
 #fi
 
-PFDIR="/Program Files (x86)"
+if [ -z "$MSYS" ]; then
+  export MSYS="/msys64"
+fi
 
-VCDIR="$PFDIR/Microsoft Visual Studio 12.0/VC"
-WKDIR="$PFDIR/Windows Kits/8.1"
+ADDPATHMINGW32="/c/msys64/mingw32/bin:"
+ADDPATHMINGW64="/c/msys64/mingw64/bin:"
 
-MSYS="/msys"
-
-ADDPATHMINGW32="/c/mingw32/bin:"
-ADDPATHMINGW64="/c/mingw64/bin:"
-
-ADDPATHVC32="/c$VCDIR/bin:"
-ADDPATHVC64="/c$VCDIR/bin/x86_amd64:"
-
-COMMONPATH="/c$MSYS/bin:"
+COMMONPATH="/c$MSYS/usr/bin:"
 
 export INSTALL_PREFIX="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././."
 
 cd "`dirname $0`"
 
-for VARIANT in mingw32 mingw64 visualc32 visualc64; do
+#for VARIANT in mingw32 mingw64 visualc32 visualc64; do
+for VARIANT in visualc64; do
 
   cd "$rootfromhere"
 
@@ -44,15 +40,9 @@ for VARIANT in mingw32 mingw64 visualc32 visualc64; do
              ;;
   visualc32) CONFIG_CC="cl.exe"
              RUN_TESTS=1
-             ADDPATH="$COMMONPATH$ADDPATHVC32"
-             export LIB="C:$WKDIR/Lib/winv6.3/um/x86;C:$VCDIR/lib"
-             export INCLUDE="C:$WKDIR/Include/um;C:$WKDIR/Include/shared;C:$VCDIR/include"
              ;;
   visualc64) CONFIG_CC="cl.exe"
              RUN_TESTS=1
-             ADDPATH="$COMMONPATH$ADDPATHVC64$ADDPATHVC32"
-             export LIB="C:$WKDIR/Lib/winv6.3/um/x64;C:$VCDIR/lib/amd64"
-             export INCLUDE="C:$WKDIR/Include/um;C:$WKDIR/Include/shared;C:$VCDIR/include"
              ;;
   esac
 
@@ -60,7 +50,7 @@ for VARIANT in mingw32 mingw64 visualc32 visualc64; do
 
   cat build-cmds
 
-  "c:$MSYS/bin/sh" build-cmds
+  "c:$MSYS/usr/bin/sh" build-cmds
 
   cd "$herefromroot"
 
@@ -70,7 +60,7 @@ for VARIANT in mingw32 mingw64 visualc32 visualc64; do
 
   cat build-cmds
 
-  "c:$MSYS/bin/sh" build-cmds
+  "c:$MSYS/usr/bin/sh" build-cmds
 
   cat build-phase2.out
 

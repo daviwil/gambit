@@ -1,0 +1,118 @@
+name: Gambit Release
+
+on:
+  push:
+    # TODO TODO TODO -- Trigger this on tags, not master!
+    branches:
+      - release-pipeline
+
+jobs:
+  Windows:
+    name: "Windows"
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Checkout history and tags
+
+    - name: Install MSYS2
+      uses: eine/setup-msys2@v1
+      with:
+        update: true
+        cache: true
+        install: "autoconf git make tar texinfo mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-gcc mingw-w64-i686-make mingw-w64-i686-libwinpthread-git"
+        path-type: inherit
+        msystem: MSYS
+
+    - name: Build Installers
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        call msys2 ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host CC="cl.exe"
+        call msys2 ./prebuilt/windows/build-phase2
+
+    # - name: Build Gambit for Use
+    #   shell: msys2 {0}
+    #   run: |
+    #     mkdir dist
+    #     export CFLAGS="-O0" # Avoid a segfault caused by GCC optimizations
+    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist;make -j4; make modules; make install
+
+    - name: Upload visualc64 Installer
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-v4_9_3-windows-visualc64.exe
+        path: ./gambit-v4_9_3-windows-visualc64.exe
+
+    - name: Report Failure to Gitter
+      run: curl --data-urlencode "message=${{ github.job }} build of CI run [$GITHUB_RUN_ID](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) failed" -d level=error ${{ secrets.GITTER_URL }}
+      if: failure() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+
+  Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Checkout history and tags
+
+    # - name: Build Gambit for Use
+    #   run: |
+    #     mkdir dist
+    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist && make -j4 && make modules && make install
+    #     cd dist/
+    #     tar -cvzf ../gambit-linux-x86_64.tar.gz ./
+    #     cd ..
+
+    # - name: Upload Build Artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: gambit-linux-x86_64
+    #     path: gambit-linux-x86_64.tar.gz
+
+    - name: Report Failure to Gitter
+      run: curl --data-urlencode "message=${{ github.job }} build of CI run [$GITHUB_RUN_ID](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) failed" -d level=error ${{ secrets.GITTER_URL }}
+      if: failure() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+
+  MacOS:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Checkout history and tags
+
+    # - name: Build and Test
+    #   run: |
+    #     export CC=gcc-9
+    #     ./configure --enable-debug --enable-multiple-threaded-vms && make clean && make -j4 && make check && make clean && ./configure --enable-debug --enable-multiple-threaded-vms --enable-cplusplus && make -j4 && make check && make clean && ./configure --enable-ansi-c && make -j4 && (cd tests; make test1) && (cd tests; make test2) && (cd tests; make test3) && (cd tests; make test4) && (cd tests; make test5)
+
+    # - name: Build Gambit for Use
+    #   run: |
+    #     mkdir dist
+    #     export CC=gcc-9
+    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist && make -j4 && make modules && make install
+    #     cd dist/
+    #     tar -cvzf ../gambit-macos-x86_64.tar.gz ./
+    #     cd ..
+
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: gambit-macos-x86_64
+    #     path: gambit-macos-x86_64.tar.gz
+
+    - name: Report Failure to Gitter
+      run: curl --data-urlencode "message=${{ github.job }} build of CI run [$GITHUB_RUN_ID](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) failed" -d level=error ${{ secrets.GITTER_URL }}
+      if: failure() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+
+  ReportResult:
+    runs-on: ubuntu-latest
+    needs: [Windows, Linux, MacOS]
+    if: ${{ success() }}
+
+    steps:
+    - name: Report Success to Gitter
+      run: curl --data-urlencode "message=CI run [$GITHUB_RUN_ID](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) passed" ${{ secrets.GITTER_URL }}
+      if: success() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
