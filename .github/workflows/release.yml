@@ -30,7 +30,7 @@ jobs:
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
         call msys2 ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host CC="cl.exe"
-        call msys2 ./prebuilt/windows/build-phase2
+        call msys2 ./prebuilt/windows/build-phase2 visualc64 1
 
     # - name: Build Gambit for Use
     #   shell: msys2 {0}
