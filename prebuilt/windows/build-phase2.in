@@ -41,7 +41,7 @@ install_gambit()
 {
   cd "$rootfromhere"
   make clean
-  make -j
+  make -j2
   make modules
   make _gambit.js _gambit.py
   make install
