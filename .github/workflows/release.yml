@@ -40,7 +40,7 @@ jobs:
     - name: Build Installers
       run: |
         ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host
-        ./prebuilt/windows/build-phase2 ${{ matrix.variant }} 1; cat tests/test*.out
+        ./prebuilt/windows/build-phase2 ${{ matrix.variant }} 0
 
     # - name: Build Gambit for Use
     #   run: |
