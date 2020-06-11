@@ -38,11 +38,9 @@ jobs:
         msystem: ${{ matrix.msystem }}
 
     - name: Build Installers
-      shell: cmd
       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
-        call msys2 ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host
-        call msys2 ./prebuilt/windows/build-phase2 ${{ matrix.variant }} 1
+        ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host
+        ./prebuilt/windows/build-phase2 ${{ matrix.variant }} 1; cat tests/test*.out
 
     # - name: Build Gambit for Use
     #   run: |
