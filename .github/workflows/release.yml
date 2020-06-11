@@ -7,6 +7,58 @@ on:
       - release-pipeline
 
 jobs:
+  Windows-mingw:
+    name: "Windows - ${{ matrix.msystem }}"
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - msystem: "MINGW64"
+            variant: "mingw64"
+            arch: "x86_64"
+          - msystem: "MINGW32"
+            variant: "mingw32"
+            arch: "i686"
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Checkout history and tags
+
+    - name: Install MSYS2
+      uses: eine/setup-msys2@v1
+      with:
+        update: true
+        cache: true
+        install: "autoconf git make tar texinfo mingw-w64-${{ matrix.arch }}-gcc mingw-w64-${{ matrix.arch }}-make mingw-w64-${{ matrix.arch }}-libwinpthread-git"
+        msystem: ${{ matrix.msystem }}
+
+    - name: Build Installers
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        call msys2 ./configure --prefix="C:/Gambit/././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././." --enable-multiple-versions --enable-symlinks --enable-single-host
+        call msys2 ./prebuilt/windows/build-phase2 ${{ matrix.variant }} 1
+
+    # - name: Build Gambit for Use
+    #   run: |
+    #     mkdir dist
+    #     export CFLAGS="-O0" # Avoid a segfault caused by GCC optimizations
+    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist;make -j4; make modules; make install
+
+    - name: Upload Installer
+      uses: actions/upload-artifact@v1
+      with:
+        name: gambit-v4_9_3-windows-${{ matrix.variant }}.exe
+        path: ./gambit-v4_9_3-windows-${{ matrix.variant }}.exe
+
+    - name: Report Failure to Gitter
+      run: curl --data-urlencode "message=${{ github.job }} build of CI run [$GITHUB_RUN_ID](https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) failed" -d level=error ${{ secrets.GITTER_URL }}
+      if: failure() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
   Windows-visualc:
     name: "Windows - ${{ matrix.variant }}"
     runs-on: windows-latest
@@ -28,7 +80,7 @@ jobs:
       with:
         update: true
         cache: true
-        install: "autoconf git make tar texinfo mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-gcc mingw-w64-i686-make mingw-w64-i686-libwinpthread-git"
+        install: "autoconf git make tar texinfo"
         path-type: inherit
         msystem: MSYS
 
@@ -44,9 +96,12 @@ jobs:
     #   run: |
     #     mkdir dist
     #     export CFLAGS="-O0" # Avoid a segfault caused by GCC optimizations
-    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist;make -j4; make modules; make install
+    #     ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist
+    #     make -j4
+    #     make modules
+    #     make install
 
-    - name: Upload visualc64 Installer
+    - name: Upload Installer
       uses: actions/upload-artifact@v1
       with:
         name: gambit-v4_9_3-windows-${{ matrix.variant}}.exe
