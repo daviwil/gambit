@@ -194,6 +194,9 @@ gsc-boot@exe@:
 	    test "`$(GIT) describe --tags`" != "$(PACKAGE_VERSION)"; then \
 	  echo "*** checking if current gsc-boot must be built"; \
 	  $(MAKE) current-gsc-boot; \
+	elif [ -e boot/gsc/gsc@exe@ ]; then \
+		echo "**** using existing boot/gsc/gsc as gsc-boot"; \
+		cp boot/gsc/gsc@exe@ gsc-boot@exe@; \
 	else \
 	  echo "*** using a dummy gsc-boot"; \
 	  $(MAKE) dummy-gsc-boot; \
