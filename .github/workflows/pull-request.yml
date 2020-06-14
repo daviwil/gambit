@@ -1,0 +1,156 @@
+name: Gambit PR
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+      - pull-request-ci # TODO: TEMPORARY
+
+jobs:
+  Windows-mingw:
+    name: "Windows - ${{ matrix.msystem }}"
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - msystem: "MINGW64"
+            arch: "x86_64"
+          - msystem: "MINGW32"
+            arch: "i686"
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install MSYS2
+      uses: msys2/setup-msys2@v1
+      with:
+        update: true
+        cache: true
+        install: "autoconf git make tar texinfo mingw-w64-${{ matrix.arch }}-gcc mingw-w64-${{ matrix.arch }}-make mingw-w64-${{ matrix.arch }}-libwinpthread-git"
+        path-type: inherit
+        msystem: ${{ matrix.msystem }}
+
+    - name: Download Bootstrapped Source
+      uses: daviwil/download-gambit@v1
+      with:
+        os: boot
+        local-path: ./
+        repo: daviwil/gambit
+        artifact-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      run: |
+        ./configure --enable-debug --enable-multiple-threaded-vms
+        cd boot && ./configure && make -j2 && cd ..
+        make -j2
+        make modules
+
+    # Only run tests for MinGW64 for now
+    - name: Test
+      if: ${{ matrix.msystem == 'MINGW64' }}
+      shell: cmd
+      run: make check
+
+  Windows-msvc:
+    name: "Windows - MSVC"
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install MSYS2
+      uses: msys2/setup-msys2@v1
+      with:
+        update: true
+        cache: true
+        install: "autoconf make tar texinfo"
+        path-type: inherit
+        msystem: MSYS
+
+    - name: Download Bootstrapped Source
+      uses: daviwil/download-gambit@v1
+      with:
+        os: boot
+        local-path: ./
+        repo: daviwil/gambit
+        artifact-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
+        call msys2 ./configure --enable-c-opt=-Od --enable-debug CC="cl"
+        call msys2 cd boot && ./configure && make -j2 && cd ..
+        call msys2 make -j2 && make modules
+
+    - name: Test
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        call msys2 make check
+
+    - name: Build vstudio.bat
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
+        call misc\vstudio.bat
+        cd tests
+        ..\gsc\gsc -f -warnings -c -nb-gvm-regs 5 -nb-arg-regs 3 mix.scm
+        echo n | comp mix.c test5.ok
+
+  Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download Bootstrapped Source
+      uses: daviwil/download-gambit@v1
+      with:
+        os: boot
+        local-path: ./
+        repo: daviwil/gambit
+        artifact-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      run: |
+        ./configure --enable-debug --enable-multiple-threaded-vms
+        cd boot && ./configure && make -j2 && cd ..
+        make -j2
+        make modules
+
+    - name: Test
+      run: make check
+
+  MacOS:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download Bootstrapped Source
+      uses: daviwil/download-gambit@v1
+      with:
+        os: boot
+        local-path: ./
+        repo: daviwil/gambit
+        artifact-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      run: |
+        export CC=gcc-9
+        ./configure --enable-debug --enable-multiple-threaded-vms
+        cd boot && ./configure && make -j2 && cd ..
+        make -j2
+        make modules
+
+    - name: Test
+      run: make check
