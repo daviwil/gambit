@@ -60,7 +60,6 @@ jobs:
     # Only run tests for MinGW64 for now
     - name: Test
       if: ${{ matrix.msystem == 'MINGW64' }}
-      shell: cmd
       run: |
         for i in {1..20}
         do
