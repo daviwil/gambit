@@ -40,13 +40,19 @@ jobs:
         msystem: ${{ matrix.msystem }}
 
     - name: Build
-      run: ./configure --enable-debug --enable-multiple-threaded-vms;make -j4; make modules
+      run: ./configure --enable-debug --enable-multiple-threaded-vms;make -j4
 
     # Only run tests for MinGW64 for now
     - name: Test
       if: ${{ matrix.msystem == 'MINGW64' }}
-      shell: cmd
-      run: make check
+      run: |
+        for i in {1..20}
+        do
+          echo
+          echo "****** Cycle $i ******"
+          echo
+          make ut
+        done
 
     # - name: Build Gambit for Use
     #   run: |
