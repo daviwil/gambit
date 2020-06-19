@@ -1248,6 +1248,8 @@ end-of-code
 
 ;;;----------------------------------------------------------------------------
 
+(define (##mingw) "issue 606")
+
 (define-prim (##dynamic-env-bind denv thunk)
   (##declare (not interrupts-enabled))
   (let* ((current-thread
