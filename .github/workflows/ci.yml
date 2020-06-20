@@ -60,7 +60,7 @@ jobs:
     # Only run tests for MinGW64 for now
     - name: Test
       if: ${{ matrix.msystem == 'MINGW64' }}
-      run: (make ut; make ut; make ut; make ut; make ut)
+      run: (make check; make ut; make check; make ut; make check)
 
   #   - name: Build Gambit for Use
   #     run: |
