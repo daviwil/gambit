@@ -112,7 +112,8 @@ jobs:
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
         mkdir dist
-        msys2 ./configure --enable-single-host --enable-gambitdir=~~execdir/.. --prefix=$(pwd)/dist CC="cl" && make -j%NUMBER_OF_PROCESSORS% && make modules && make install
+        msys2 ./configure --enable-single-host --enable-gambitdir=~~execdir\\.. --prefix=$(pwd)/dist CC="cl" && make -j%NUMBER_OF_PROCESSORS% && make modules && make install
+        .\dist\bin\gsc.exe -v
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
