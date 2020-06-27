@@ -76,14 +76,14 @@ jobs:
       run: |
         ./.github/workflows/build-gambit.sh
         cd dist/
-        tar -cvzf ../gambit-linux-x86_64.tar.gz ./
+        tar -cvzf ../gambit-linux-x86_64.tgz ./
         cd ..
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: gambit-linux-x86_64
-        path: gambit-linux-x86_64.tar.gz
+        path: gambit-linux-x86_64.tgz
 
   MacOS:
     runs-on: macos-latest
@@ -98,14 +98,14 @@ jobs:
         export CC=gcc-9
         ./.github/workflows/build-gambit.sh
         cd dist/
-        tar -cvzf ../gambit-macos-x86_64.tar.gz ./
+        tar -cvzf ../gambit-macos-x86_64.tgz ./
         cd ..
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: gambit-macos-x86_64
-        path: gambit-macos-x86_64.tar.gz
+        path: gambit-macos-x86_64.tgz
 
   # CreateRelease:
   #   runs-on: ubuntu-latest
