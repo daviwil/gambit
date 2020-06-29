@@ -86,7 +86,7 @@ jobs:
       shell: cmd
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
-        call msys2 ./configure --enable-c-opt=-Od --enable-debug CC="cl" && cd boot && ./configure && make -j2 && cd .. && make -j2 && make modules
+        msys2 ./configure --enable-c-opt=-Od --enable-debug CC="cl" && echo "BEFORE CD BOOT" && cd boot && echo "BEFORE BOOT CONFIGURE" && pwd && ./configure && echo "BEFORE BOOT MAKE" && make -j2 && echo "BEFORE CD .." && cd .. && echo "BEFORE REAL MAKE" && make -j2 && make modules
 
     - name: Test
       shell: cmd
