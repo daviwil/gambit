@@ -72,7 +72,7 @@ jobs:
         cache: true
         install: "autoconf make tar texinfo"
         path-type: inherit
-        msystem: MINGW64
+        msystem: MSYS
 
     - name: Download Bootstrapped Source
       uses: daviwil/download-gambit@v1
