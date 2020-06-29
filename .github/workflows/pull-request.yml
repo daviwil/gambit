@@ -86,10 +86,7 @@ jobs:
       shell: cmd
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.16
-        set PATH=%RUNNER_TEMP%\msys\msys64\usr\bin;%PATH%
-        call msys2 ./configure --enable-c-opt=-Od --enable-debug CC="cl"
-        call msys2 cd boot && ./configure && make -j2 && cd ..
-        call msys2 make -j2 && make modules
+        call msys2 ./configure --enable-c-opt=-Od --enable-debug CC="cl" && cd boot && ./configure && make -j2 && cd .. && make -j2 && make modules
 
     - name: Test
       shell: cmd
