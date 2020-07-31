@@ -2177,8 +2177,38 @@ ___CAST_U64((val)<<(((i)&7)<<3))
  * ___tMEM2     = tag #2 for memory allocated objects
  * ___tSUBTYPED = ___tMEM1
  * ___tPAIR     = ___tMEM1 or ___tMEM2
+ *
+ * When ___USE_THREE_BIT_TAG is defined, type tags occupy the lower
+ * 3 bits of a ___SCMOBJ with an expanded tag set:
+ *
+ * ___tFIXNUM   = tag for fixnums (small integers), must be 0
+ * ___tBIGNUM   = tag for bignums (large integers)
+ * ___tBOOL     = tag for booleans (#f, #t)
+ * ___tVECTOR   = tag for vectors
+ * ___tCHAR     = tag for characters
+ * ___tPAIR     = tag for pairs
+ * ___tSPECIAL  = tag for other immediates ((), #!eof, ...)
+ * ___tMEM1     = tag #1 for memory allocated objects
+ * ___tMEM2     = ___tPAIR
+ * ___tSUBTYPED = ___tMEM1
+ *
+ * Memory allocated objects are identified by a least-significant
+ * bit of 1.
  */
 
+#ifdef ___USE_THREE_BIT_TAG
+#define ___TB 3
+#define ___tFIXNUM   0
+#define ___tBIGNUM   1
+#define ___tBOOL     2
+#define ___tVECTOR   3
+#define ___tCHAR     4
+#define ___tPAIR     5
+#define ___tSPECIAL  6
+#define ___tMEM1     7
+#define ___tMEM2     ___tPAIR
+#define ___tSUBTYPED ___tMEM1
+#else /* Begin two-bit tag definitions */
 #define ___TB 2
 #define ___tFIXNUM   0
 #define ___tMEM2     3
@@ -2198,6 +2228,7 @@ ___CAST_U64((val)<<(((i)&7)<<3))
 #else
 #define ___tPAIR ___tMEM2
 #endif
+#endif /* End two-bit tag definitions */
 
 #define ___MEM_ALLOCATED(obj)((obj)&___tMEM1)
 #define ___MEM_ALLOCATED_CLEAR(obj)((obj)&~___CAST(___WORD,___tMEM1))
